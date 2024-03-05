@@ -475,11 +475,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\0821j\\source\\repos\\2024Trial\\2024Trial\\2024Trial.csproj",
+      "projectUniqueName": "C:\\Users\\0821j\\source\\repos\\2024Trial\\lsc2024\\2024Trial\\2024Trial.csproj",
       "projectName": "2024Trial",
-      "projectPath": "C:\\Users\\0821j\\source\\repos\\2024Trial\\2024Trial\\2024Trial.csproj",
+      "projectPath": "C:\\Users\\0821j\\source\\repos\\2024Trial\\lsc2024\\2024Trial\\2024Trial.csproj",
       "packagesPath": "C:\\Users\\0821j\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\0821j\\source\\repos\\2024Trial\\2024Trial\\obj\\",
+      "outputPath": "C:\\Users\\0821j\\source\\repos\\2024Trial\\lsc2024\\2024Trial\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\0821j\\AppData\\Roaming\\NuGet\\NuGet.Config",

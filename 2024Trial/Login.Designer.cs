@@ -124,8 +124,9 @@
             RegiRedirectLink.TabIndex = 8;
             RegiRedirectLink.TabStop = true;
             RegiRedirectLink.Text = "아직 회원이 아니신가요?";
+            RegiRedirectLink.LinkClicked += RegiRedirectLink_LinkClicked;
             // 
-            // Form1
+            // Login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -139,8 +140,8 @@
             Controls.Add(IDBox);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Form1";
-            Text = "Form1";
+            Name = "Login";
+            Text = "로그인";
             ResumeLayout(false);
             PerformLayout();
         }

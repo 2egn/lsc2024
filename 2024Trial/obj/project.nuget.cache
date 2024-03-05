@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ofvmdhKEv0uL++woa1SANzs0qEBJzTGZrLDXEtDjVQlTFOS+mXeSmuNqBdeETSC9ByeQKBN3fI+wCdbiaI5Nkw==",
+  "dgSpecHash": "X/oLZ1FgDrn/LWyuGl9HYP9eyvXYF6bk+5/NVIvGXaRBRX+MWBnk6Ec4i6+8pEVRT1JLIu3S8lGUmn9TKzgHVA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\0821j\\source\\repos\\2024Trial\\2024Trial\\2024Trial.csproj",
+  "projectFilePath": "C:\\Users\\0821j\\source\\repos\\2024Trial\\lsc2024\\2024Trial\\2024Trial.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\0821j\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\0821j\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",

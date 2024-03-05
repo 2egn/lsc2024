@@ -4,11 +4,11 @@ namespace _2024Trial
 {
     public partial class Login : Form
     {
+
+        
         public Login()
         {
             InitializeComponent();
-            Form2 form2 = new Form2();
-            form2.Show();
         }
 
         static string server = "127.0.0.1";
@@ -28,18 +28,21 @@ namespace _2024Trial
             bool AccountExistance = false;
             bool isPasswordCorrect = false;
             var usernickname = "";
+            bool isAdmin = false;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectString))
                 {
                     conn.Open();
-                    AccountExistance = new SqlCommand($"SELECT * FROM dbo.[User] WHERE [uid]='{inputId}'",conn).ExecuteReader().Read();
+                    AccountExistance = new SqlCommand($"SELECT * FROM dbo.[User] WHERE [uid]='{inputId}'", conn).ExecuteReader().Read();
                     conn.Close();
                     conn.Open();
-                    SqlDataReader dr = new SqlCommand($"SELECT userName FROM dbo.[User] WHERE [uid]='{inputId}' AND [pwd] = '{inputPw}'", conn).ExecuteReader();
+                    SqlDataReader dr = new SqlCommand($"SELECT userName, isAdmin FROM dbo.[User] WHERE [uid]='{inputId}' AND [pwd] = '{inputPw}'", conn).ExecuteReader();
                     if (dr.Read())
                     {
                         usernickname = dr.GetString(0);
+                        isAdmin = dr.GetBoolean(1);
+
                         isPasswordCorrect = true;
                     }
                     conn.Close();
@@ -64,7 +67,15 @@ namespace _2024Trial
             }
             else
             {
-                MessageBox.Show($"{usernickname} 회원님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (isAdmin)
+                {
+                    MessageBox.Show($"{usernickname} 관리자님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"{usernickname} 회원님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                
             }
 
         }
@@ -72,6 +83,12 @@ namespace _2024Trial
         private void IDBox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void RegiRedirectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Register register = new Register();
+            register.Show();
         }
     }
 }

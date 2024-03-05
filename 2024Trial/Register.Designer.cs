@@ -1,6 +1,6 @@
 ﻿namespace _2024Trial
 {
-    partial class Form2
+    partial class Register
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Register));
             label1 = new Label();
             NameBox = new TextBox();
             label2 = new Label();
@@ -42,7 +42,7 @@
             label6 = new Label();
             label7 = new Label();
             BirthDayBox = new DateTimePicker();
-            LoginButton = new Button();
+            RegisterButton = new Button();
             ExitButton = new Button();
             NameWarning = new PictureBox();
             IDWarning = new PictureBox();
@@ -169,15 +169,16 @@
             BirthDayBox.Size = new Size(205, 23);
             BirthDayBox.TabIndex = 14;
             // 
-            // LoginButton
+            // RegisterButton
             // 
-            LoginButton.BackColor = Color.Cyan;
-            LoginButton.Location = new Point(71, 313);
-            LoginButton.Name = "LoginButton";
-            LoginButton.Size = new Size(110, 41);
-            LoginButton.TabIndex = 15;
-            LoginButton.Text = "회원가입";
-            LoginButton.UseVisualStyleBackColor = false;
+            RegisterButton.BackColor = Color.Cyan;
+            RegisterButton.Location = new Point(71, 313);
+            RegisterButton.Name = "RegisterButton";
+            RegisterButton.Size = new Size(110, 41);
+            RegisterButton.TabIndex = 15;
+            RegisterButton.Text = "회원가입";
+            RegisterButton.UseVisualStyleBackColor = false;
+            RegisterButton.Click += LoginButton_Click;
             // 
             // ExitButton
             // 
@@ -256,7 +257,7 @@
             BirthdayWarning.TabStop = false;
             BirthdayWarning.Visible = false;
             // 
-            // Form2
+            // Register
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -268,7 +269,7 @@
             Controls.Add(IDWarning);
             Controls.Add(NameWarning);
             Controls.Add(ExitButton);
-            Controls.Add(LoginButton);
+            Controls.Add(RegisterButton);
             Controls.Add(BirthDayBox);
             Controls.Add(label7);
             Controls.Add(NicknameBox);
@@ -282,7 +283,7 @@
             Controls.Add(NameBox);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Form2";
+            Name = "Register";
             Text = "Form2";
             ((System.ComponentModel.ISupportInitialize)NameWarning).EndInit();
             ((System.ComponentModel.ISupportInitialize)IDWarning).EndInit();
@@ -309,7 +310,7 @@
         private Label label6;
         private Label label7;
         private DateTimePicker BirthDayBox;
-        private Button LoginButton;
+        private Button RegisterButton;
         private Button ExitButton;
         private PictureBox NameWarning;
         private PictureBox IDWarning;
