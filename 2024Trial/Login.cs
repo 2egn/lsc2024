@@ -87,8 +87,9 @@ namespace _2024Trial
 
         private void RegiRedirectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Register register = new Register();
+            Register register = new Register(this);
             register.Show();
+            this.Visible = false;
         }
     }
 }

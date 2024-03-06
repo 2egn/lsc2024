@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Register));
             label1 = new Label();
             NameBox = new TextBox();
@@ -50,6 +51,7 @@
             PWConfirmWarning = new PictureBox();
             NicknameWarning = new PictureBox();
             BirthdayWarning = new PictureBox();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)NameWarning).BeginInit();
             ((System.ComponentModel.ISupportInitialize)IDWarning).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PWWarning).BeginInit();
@@ -74,7 +76,6 @@
             NameBox.Name = "NameBox";
             NameBox.Size = new Size(205, 23);
             NameBox.TabIndex = 4;
-            NameBox.TextChanged += NameBox_TextChanged;
             // 
             // label2
             // 
@@ -142,7 +143,6 @@
             NicknameBox.Name = "NicknameBox";
             NicknameBox.Size = new Size(205, 23);
             NicknameBox.TabIndex = 12;
-            NicknameBox.TextChanged += textBox4_TextChanged;
             // 
             // label6
             // 
@@ -189,6 +189,7 @@
             ExitButton.TabIndex = 16;
             ExitButton.Text = "취소";
             ExitButton.UseVisualStyleBackColor = false;
+            ExitButton.Click += ExitButton_Click;
             // 
             // NameWarning
             // 
@@ -200,7 +201,7 @@
             NameWarning.TabIndex = 17;
             NameWarning.TabStop = false;
             NameWarning.Visible = false;
-            NameWarning.Click += pictureBox1_Click;
+            NameWarning.MouseHover += NameWarning_MouseHover;
             // 
             // IDWarning
             // 
@@ -212,6 +213,7 @@
             IDWarning.TabIndex = 18;
             IDWarning.TabStop = false;
             IDWarning.Visible = false;
+            IDWarning.MouseHover += NameWarning_MouseHover;
             // 
             // PWWarning
             // 
@@ -223,6 +225,7 @@
             PWWarning.TabIndex = 19;
             PWWarning.TabStop = false;
             PWWarning.Visible = false;
+            PWWarning.MouseHover += NameWarning_MouseHover;
             // 
             // PWConfirmWarning
             // 
@@ -234,6 +237,7 @@
             PWConfirmWarning.TabIndex = 20;
             PWConfirmWarning.TabStop = false;
             PWConfirmWarning.Visible = false;
+            PWConfirmWarning.MouseHover += NameWarning_MouseHover;
             // 
             // NicknameWarning
             // 
@@ -245,6 +249,7 @@
             NicknameWarning.TabIndex = 21;
             NicknameWarning.TabStop = false;
             NicknameWarning.Visible = false;
+            NicknameWarning.MouseHover += NameWarning_MouseHover;
             // 
             // BirthdayWarning
             // 
@@ -256,6 +261,7 @@
             BirthdayWarning.TabIndex = 22;
             BirthdayWarning.TabStop = false;
             BirthdayWarning.Visible = false;
+            BirthdayWarning.MouseHover += NameWarning_MouseHover;
             // 
             // Register
             // 
@@ -318,5 +324,6 @@
         private PictureBox PWConfirmWarning;
         private PictureBox NicknameWarning;
         private PictureBox BirthdayWarning;
+        private ToolTip toolTip1;
     }
 }
