@@ -8,6 +8,8 @@ namespace _2024Trial
         
         public Login()
         {
+            UserManage usermanage = new UserManage();
+            usermanage.Show();
             InitializeComponent();
         }
 

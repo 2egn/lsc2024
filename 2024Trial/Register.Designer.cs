@@ -168,6 +168,7 @@
             BirthDayBox.Name = "BirthDayBox";
             BirthDayBox.Size = new Size(205, 23);
             BirthDayBox.TabIndex = 14;
+            BirthDayBox.Value = new DateTime(2024, 1, 1, 0, 0, 0, 0);
             // 
             // RegisterButton
             // 
@@ -290,7 +291,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "Register";
-            Text = "Form2";
+            Text = "회원가입";
             ((System.ComponentModel.ISupportInitialize)NameWarning).EndInit();
             ((System.ComponentModel.ISupportInitialize)IDWarning).EndInit();
             ((System.ComponentModel.ISupportInitialize)PWWarning).EndInit();

@@ -51,3 +51,4 @@ C:\Users\0821j\source\repos\2024Trial\lsc2024\2024Trial\obj\Debug\net8.0-windows
 C:\Users\0821j\source\repos\2024Trial\lsc2024\2024Trial\obj\Debug\net8.0-windows\2024Trial.pdb
 C:\Users\0821j\source\repos\2024Trial\lsc2024\2024Trial\obj\Debug\net8.0-windows\2024Trial.genruntimeconfig.cache
 C:\Users\0821j\source\repos\2024Trial\lsc2024\2024Trial\obj\Debug\net8.0-windows\ref\2024Trial.dll
+C:\Users\0821j\source\repos\2024Trial\lsc2024\2024Trial\obj\Debug\net8.0-windows\_2024Trial.UserManage.resources

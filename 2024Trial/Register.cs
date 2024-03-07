@@ -38,14 +38,22 @@ namespace _2024Trial
         {
             if (nameValidCheck() & IDValidCheck() & PWValidCheck() & NickNameValidCheck() & DateCheck())
             {
-                MessageBox.Show("회원가입이 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                using (SqlConnection conn = new SqlConnection(connectString))
+                try
                 {
-                    string formattedDate = BirthDayBox.Value.ToString("yyyy-MM-dd");
-                    MessageBox.Show($"{BirthDayBox.Value.ToString()}");
-                    conn.Open();
-                    new SqlCommand($"INSERT INTO dbo.[User] VALUES('{NameBox.Text}', '{IDBox.Text}', '{PWBox.Text}', '{NicknameBox.Text}', '{formattedDate}' ,0,0)", conn).ExecuteNonQuery();
-                    conn.Close();
+                    using (SqlConnection conn = new SqlConnection(connectString))
+                    {
+                        string formattedDate = BirthDayBox.Value.ToString("yyyy-MM-dd");
+                        conn.Open();
+                        new SqlCommand($"INSERT INTO dbo.[User] VALUES('{NameBox.Text}', '{IDBox.Text}', '{PWBox.Text}', '{NicknameBox.Text}', '{formattedDate}' ,0,0)", conn).ExecuteNonQuery();
+                        conn.Close();
+                    }
+                    MessageBox.Show("회원가입이 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Dispose();
+                    parentform.Visible = true;
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -164,7 +172,7 @@ namespace _2024Trial
         private void ExitButton_Click(object sender, EventArgs e)
         {
             this.Dispose();
-            parentform.Visible = true;//need to be fixed
+            parentform.Visible = true;
         }
     }
 }
