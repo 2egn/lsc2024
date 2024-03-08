@@ -32,7 +32,7 @@ namespace _2024Trial
         static int selectedRow = -1;
         private void refreshDataGridView()
         {
-
+            dataGridView1.DataSource = null;
             SqlDataReader admin_lock_reader = null;
             adminList = new();
             lockList = new();
@@ -76,7 +76,9 @@ namespace _2024Trial
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
                 //(만)나이 열 만들기
-                DateTime birthdate = Convert.ToDateTime(dataGridView1.Rows[i].Cells[4].Value);
+
+                DateTime birthdate;
+                birthdate = Convert.ToDateTime(dataGridView1.Rows[i].Cells[4].Value);
                 DateTime currentdate = DateTime.Now;
                 int age = currentdate.Year - birthdate.Year;
                 if (currentdate.Month < birthdate.Month || (currentdate.Month == birthdate.Month && currentdate.Day < birthdate.Day))
@@ -98,17 +100,7 @@ namespace _2024Trial
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = SystemColors.Control;
                 }
             }
-
-
-        }
-
-        //셀 클릭따라 잠금텍스트 변경
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            //왼쪽위 공백 누르면(row : -1) 에러 터져서 대비책
-            if (e.RowIndex != -1)  selectedRow = e.RowIndex;
-            
-            if (selectedRow > 0)
+            if (selectedRow >= 0)
             {
                 if (lockList[selectedRow])
                 {
@@ -119,12 +111,87 @@ namespace _2024Trial
                     lockButton.Text = "계정 잠금";
                 }
             }
-            else
-            {
-                MessageBox.Show("d");
-            }
+
         }
 
+        //셀 클릭따라 잠금텍스트 변경
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //왼쪽위 공백 누르면(row : -1) 에러 터져서 대비책
+            if (e.RowIndex != -1) selectedRow = e.RowIndex;
+            if (selectedRow >= 0)
+            {
+                if (lockList[selectedRow])
+                {
+                    lockButton.Text = "잠금 해제";
+                }
+                else
+                {
+                    lockButton.Text = "계정 잠금";
+                }
+            }
 
+        }
+        private void dataGridVIewReset()
+        {//데이터그리드 초기화
+            selectedRow = 0;
+            dataGridView1.Columns.Clear();
+            dataGridView1.Refresh();
+
+            if (selectedRow >= 0)
+            {
+                if (lockList[selectedRow])
+                {
+                    lockButton.Text = "잠금 해제";
+                }
+                else
+                {
+                    lockButton.Text = "계정 잠금";
+                }
+            }
+        }
+        private void lockButton_Click(object sender, EventArgs e)
+        {
+            //잠금버튼
+            if (selectedRow < 0)
+            {
+                MessageBox.Show("사용자를 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (adminList[selectedRow])
+            {
+                MessageBox.Show("관리자는 잠금할 수 없습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (!lockList[selectedRow])
+            {
+                using (SqlConnection conn = new SqlConnection(connectString))
+                {
+                    conn.Open();
+                    new SqlCommand($"UPDATE dbo.[User] SET isLock = 1 WHERE idx={dataGridView1.Rows[selectedRow].Cells[0].Value}", conn).ExecuteNonQuery();
+                }
+
+                MessageBox.Show("계정 잠금이 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                using (SqlConnection conn = new SqlConnection(connectString))
+                {
+                    conn.Open();
+                    new SqlCommand($"UPDATE dbo.[User] SET isLock = 0 WHERE idx={dataGridView1.Rows[selectedRow].Cells[0].Value}", conn).ExecuteNonQuery();
+                }
+                MessageBox.Show("잠금 해제가 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+
+            dataGridVIewReset();
+            refreshDataGridView();
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+
+            }
+        }
     }
 }

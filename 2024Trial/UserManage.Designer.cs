@@ -58,6 +58,7 @@
             dataGridView1.Size = new Size(731, 268);
             dataGridView1.TabIndex = 1;
             dataGridView1.CellClick += dataGridView1_CellClick;
+            dataGridView1.MouseDown += dataGridView1_MouseDown;
             // 
             // lockButton
             // 
@@ -68,6 +69,7 @@
             lockButton.TabIndex = 2;
             lockButton.Text = "계정 잠금";
             lockButton.UseVisualStyleBackColor = false;
+            lockButton.Click += lockButton_Click;
             // 
             // UserManage
             // 
