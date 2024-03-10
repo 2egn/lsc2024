@@ -48,7 +48,6 @@
             label1.Size = new Size(191, 32);
             label1.TabIndex = 0;
             label1.Text = "HELLO, WORLD";
-            label1.Click += label1_Click;
             // 
             // label2
             // 
@@ -65,7 +64,6 @@
             IDBox.Name = "IDBox";
             IDBox.Size = new Size(205, 23);
             IDBox.TabIndex = 2;
-            IDBox.TextChanged += IDBox_TextChanged;
             // 
             // PWBox
             // 
@@ -114,6 +112,7 @@
             ExitButton.TabIndex = 7;
             ExitButton.Text = "종료";
             ExitButton.UseVisualStyleBackColor = false;
+            ExitButton.Click += ExitButton_Click;
             // 
             // RegiRedirectLink
             // 

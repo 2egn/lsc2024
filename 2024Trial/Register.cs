@@ -19,19 +19,19 @@ namespace _2024Trial
         static string userid = "sa";
         static string userpw = "test1234";
         string connectString = $"Server={server};Database={database};Uid={userid};Pwd={userpw};";
-        Form parentform = null;
+        Form? parentform = null;
         public Register(Form parentForm)
         {
             InitializeComponent();
             parentform = parentForm;
         }
 
-        string namewarnstring;
-        string idwarnstring;
-        string pwwarnstring;
-        string pwconfirmwarnstring;
-        string nickwarnstring;
-        string birthdaywarnstring;
+        string? namewarnstring;
+        string? idwarnstring;
+        string? pwwarnstring;
+        string? pwconfirmwarnstring;
+        string? nickwarnstring;
+        string? birthdaywarnstring;
 
 
         private void LoginButton_Click(object sender, EventArgs e)

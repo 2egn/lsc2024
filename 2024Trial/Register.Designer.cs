@@ -168,7 +168,7 @@
             BirthDayBox.Name = "BirthDayBox";
             BirthDayBox.Size = new Size(205, 23);
             BirthDayBox.TabIndex = 14;
-            BirthDayBox.Value = new DateTime(2024, 1, 1, 0, 0, 0, 0);
+            BirthDayBox.Value = new DateTime(2000, 1, 1, 0, 0, 0, 0);
             // 
             // RegisterButton
             // 

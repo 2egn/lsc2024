@@ -5,11 +5,9 @@ namespace _2024Trial
     public partial class Login : Form
     {
 
-        
+
         public Login()
         {
-            UserManage usermanage = new UserManage();
-            usermanage.Show();
             InitializeComponent();
         }
 
@@ -18,10 +16,7 @@ namespace _2024Trial
         static string userid = "sa";
         static string userpw = "test1234";
         string connectString = $"Server={server};Database={database};Uid={userid};Pwd={userpw};";
-        private void label1_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void LoginButton_Click(object sender, EventArgs e)
         {
@@ -72,26 +67,34 @@ namespace _2024Trial
                 if (isAdmin)
                 {
                     MessageBox.Show($"{usernickname} 관리자님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Visible = false;
+                    UserManage usermanage = new(this);
+                    usermanage.Show();
+
                 }
                 else
                 {
                     MessageBox.Show($"{usernickname} 회원님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Visible = false;
+                    AccoutManage accountmanage = new();
+                    accountmanage.Show();
                 }
-                
+
             }
 
         }
 
-        private void IDBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void RegiRedirectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Register register = new Register(this);
             register.Show();
             this.Visible = false;
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
         }
     }
 }

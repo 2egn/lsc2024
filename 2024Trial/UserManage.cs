@@ -13,10 +13,11 @@ namespace _2024Trial
 {
     public partial class UserManage : Form
     {
-
-        public UserManage()
+        Form? ParentForm = null;
+        public UserManage(Form parentform)
         {
             InitializeComponent();
+            ParentForm = parentform;
         }
         static string server = "127.0.0.1";
         static string database = "UserManagementDB";
@@ -26,11 +27,12 @@ namespace _2024Trial
         private void UserManage_Load(object sender, EventArgs e)
         {
             refreshDataGridView();
+            selectedRow = -1;
         }
         static List<bool> adminList = new();
         static List<bool> lockList = new();
         static int selectedRow = -1;
-        private void refreshDataGridView()
+        public void refreshDataGridView()
         {
             dataGridView1.DataSource = null;
             SqlDataReader admin_lock_reader = null;
@@ -88,17 +90,21 @@ namespace _2024Trial
                 dataGridView1.Rows[i].Cells[5].Value = age + "세";
                 //isAdmin, isLock 뒷배경 바꾸기
                 if (adminList[i])
-                {
+                {//어드민인 경우
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.SkyBlue;
                 }
                 else if (lockList[i])
-                {
+                {//잠긴 계정인 경우
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.OrangeRed;
                 }
                 else
-                {
+                {//기본인 경우
                     dataGridView1.Rows[i].DefaultCellStyle.BackColor = SystemColors.Control;
                 }
+            }
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {//정렬하면 만 나이 열이 사라져서 정렬막아둠
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             if (selectedRow >= 0)
             {
@@ -117,7 +123,6 @@ namespace _2024Trial
         //셀 클릭따라 잠금텍스트 변경
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            //왼쪽위 공백 누르면(row : -1) 에러 터져서 대비책
             if (e.RowIndex != -1) selectedRow = e.RowIndex;
             if (selectedRow >= 0)
             {
@@ -132,7 +137,7 @@ namespace _2024Trial
             }
 
         }
-        private void dataGridVIewReset()
+        public void dataGridVIewReset()
         {//데이터그리드 초기화
             selectedRow = 0;
             dataGridView1.Columns.Clear();
@@ -151,18 +156,17 @@ namespace _2024Trial
             }
         }
         private void lockButton_Click(object sender, EventArgs e)
-        {
-            //잠금버튼
+        {//잠금버튼
             if (selectedRow < 0)
-            {
+            {//미선택
                 MessageBox.Show("사용자를 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (adminList[selectedRow])
-            {
+            {//관리자 선택
                 MessageBox.Show("관리자는 잠금할 수 없습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (!lockList[selectedRow])
-            {
+            {//성공적 잠금
                 using (SqlConnection conn = new SqlConnection(connectString))
                 {
                     conn.Open();
@@ -172,7 +176,7 @@ namespace _2024Trial
                 MessageBox.Show("계정 잠금이 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
-            {
+            {//성공적 잠금해제
                 using (SqlConnection conn = new SqlConnection(connectString))
                 {
                     conn.Open();
@@ -186,12 +190,52 @@ namespace _2024Trial
             refreshDataGridView();
         }
 
-        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
-        {
-            if(e.Button == MouseButtons.Right)
-            {
 
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {//우클릭 메뉴
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(MousePosition);
             }
+        }
+        private void accountEditStrip_Click(object sender, EventArgs e)
+        {//계정수정
+            if (adminList[selectedRow])
+            {//관리자인 경우
+                MessageBox.Show("관리자는 수정할 수 없습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {//사용자인 경우
+                int IDX = Convert.ToInt32(dataGridView1.Rows[selectedRow].Cells[0].Value);
+                string UID = Convert.ToString(dataGridView1.Rows[selectedRow].Cells[2].Value);
+                DateTime DATE = Convert.ToDateTime(dataGridView1.Rows[selectedRow].Cells[4].Value);
+                AccountEdit accountedit = new(IDX,UID,DATE,this); ;
+                this.Visible = false;
+                accountedit.Show();
+            }
+        }
+        private void accountDeleteStrip_Click(object sender, EventArgs e)
+        {//계정삭제
+            if (adminList[selectedRow])
+            {
+                MessageBox.Show("관리자를 삭제할 수 없습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                using (SqlConnection conn = new SqlConnection(connectString))
+                {
+                    conn.Open();
+                    new SqlCommand($"DELETE FROM dbo.[User] WHERE idx={dataGridView1.Rows[selectedRow].Cells[0].Value}", conn).ExecuteNonQuery();
+                }
+                dataGridVIewReset();
+                refreshDataGridView();
+                MessageBox.Show("계정 삭제가 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void UserManage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ParentForm.Visible = true;
         }
     }
 }
