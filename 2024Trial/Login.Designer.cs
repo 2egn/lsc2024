@@ -64,6 +64,7 @@
             IDBox.Name = "IDBox";
             IDBox.Size = new Size(205, 23);
             IDBox.TabIndex = 2;
+            IDBox.Text = "user2";
             // 
             // PWBox
             // 
@@ -72,6 +73,7 @@
             PWBox.PasswordChar = '●';
             PWBox.Size = new Size(205, 23);
             PWBox.TabIndex = 4;
+            PWBox.Text = "test1234";
             // 
             // label3
             // 

@@ -28,6 +28,7 @@ namespace _2024Trial
         {
             refreshDataGridView();
             selectedRow = -1;
+            dataGridView1.ClearSelection();
         }
         static List<bool> adminList = new();
         static List<bool> lockList = new();
@@ -141,7 +142,6 @@ namespace _2024Trial
         {//데이터그리드 초기화
             selectedRow = 0;
             dataGridView1.Columns.Clear();
-            dataGridView1.Refresh();
 
             if (selectedRow >= 0)
             {

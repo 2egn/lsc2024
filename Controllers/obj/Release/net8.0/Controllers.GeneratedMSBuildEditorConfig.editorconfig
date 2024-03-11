@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Controllers
-build_property.ProjectDir = C:\Users\0821j\source\repos\2024Trial\lsc2024\Controllers\
+build_property.ProjectDir = C:\Users\0821j\Documents\GitHub\lsc2024\Controllers\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

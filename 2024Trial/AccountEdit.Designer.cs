@@ -132,6 +132,7 @@
             // 
             PWTextBox.Location = new Point(113, 158);
             PWTextBox.Name = "PWTextBox";
+            PWTextBox.PasswordChar = '●';
             PWTextBox.Size = new Size(189, 23);
             PWTextBox.TabIndex = 8;
             // 
@@ -139,6 +140,7 @@
             // 
             PWCheckTextBox.Location = new Point(113, 185);
             PWCheckTextBox.Name = "PWCheckTextBox";
+            PWCheckTextBox.PasswordChar = '●';
             PWCheckTextBox.Size = new Size(189, 23);
             PWCheckTextBox.TabIndex = 9;
             // 

@@ -26,6 +26,7 @@ namespace _2024Trial
             bool isPasswordCorrect = false;
             var usernickname = "";
             bool isAdmin = false;
+            int IDX=0;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectString))
@@ -34,11 +35,12 @@ namespace _2024Trial
                     AccountExistance = new SqlCommand($"SELECT * FROM dbo.[User] WHERE [uid]='{inputId}'", conn).ExecuteReader().Read();
                     conn.Close();
                     conn.Open();
-                    SqlDataReader dr = new SqlCommand($"SELECT userName, isAdmin FROM dbo.[User] WHERE [uid]='{inputId}' AND [pwd] = '{inputPw}'", conn).ExecuteReader();
+                    SqlDataReader dr = new SqlCommand($"SELECT userName, isAdmin, idx FROM dbo.[User] WHERE [uid]='{inputId}'", conn).ExecuteReader();
                     if (dr.Read())
                     {
                         usernickname = dr.GetString(0);
                         isAdmin = dr.GetBoolean(1);
+                        IDX = dr.GetInt32(2);
 
                         isPasswordCorrect = true;
                     }
@@ -76,7 +78,7 @@ namespace _2024Trial
                 {
                     MessageBox.Show($"{usernickname} 회원님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Visible = false;
-                    AccoutManage accountmanage = new();
+                    AccountManage accountmanage = new(this,IDX);
                     accountmanage.Show();
                 }
 
