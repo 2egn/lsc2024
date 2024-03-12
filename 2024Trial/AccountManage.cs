@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,11 +25,11 @@ namespace _2024Trial
         int selectedRow = -1;
         Form parentForm;
         List<string> imageList = new();//{filename}
+        List<int> idList = new();
         List<int> addList = new();
         List<int> removeList = new();
-        int PrevmainPicnum = -1;
         int mainPicnum = -1;
-
+        int removedrows = 0;
 
         public AccountManage(Form parentform, int idx)
         {
@@ -51,24 +52,26 @@ namespace _2024Trial
                 conn.Close();
                 //사진 데이터 가져오기
                 conn.Open();
-                dr = new SqlCommand($"SELECT photo, isRepresent FROM dbo.[Photo] WHERE uIdx={IDX}", conn).ExecuteReader();
+                dr = new SqlCommand($"SELECT photo, isRepresent, idx FROM dbo.[Photo] WHERE uIdx={IDX}", conn).ExecuteReader();
                 while (dr.Read())
                 {
-                    
                     byte[] imageByte = (byte[])dr.GetValue(0);
-
+                    //db의 idx 가져오기
+                    idList.Add((int)dr.GetValue(2));
                     Image image;
+                    //이미지추가
                     using(MemoryStream ms = new MemoryStream(imageByte))
                     {
                         image = Image.FromStream(ms);
                     }
+                    imageList.Add(Convert.ToBase64String(imageByte));
+                    //대표사진
                     if ((bool)dr.GetValue(1) == true)
                     {
                         MainPicBox.Image = image;
-                        PrevmainPicnum = imageList.Count;
-                        mainPicnum = imageList.Count;
+                        mainPicnum = imageList.Count-1;
                     }
-                    imageList.Add(Convert.ToBase64String(imageByte));
+                    
                     dataGridView1.Rows.Add(imageList.Count, image);          
                     
                 }
@@ -85,6 +88,7 @@ namespace _2024Trial
 
         private void SaveButton_Click(object sender, EventArgs e)
         {//편집정보저장
+            MessageBox.Show(mainPicnum.ToString()); 
             if (EmptyCheck() & RepepetiveCheck())
             {
                 using (SqlConnection conn = new SqlConnection(connectString))
@@ -92,26 +96,50 @@ namespace _2024Trial
                     //이름,닉네임,생년월일 저장
                     conn.Open();
                     new SqlCommand($"UPDATE dbo.[User] SET userName = '{NameBox.Text}', nickName = '{NickNameBox.Text}', dob = '{DateBox.Value.ToString("yyyy-MM-dd")}' WHERE idx = {IDX}", conn).ExecuteNonQuery();
-                    conn.Close();
                     //이미지 저장(varbinary)
-                    conn.Open();
                     foreach (int num in addList)
                     {
-                        string addquery = $"INSERT INTO dbo.[photo] VALUES ({IDX},@BinaryValue,0)";
-                        byte[] data = File.ReadAllBytes(imageList[num]);
-                        SqlCommand cmd = new SqlCommand(addquery, conn);
-                        SqlParameter param = new SqlParameter("@BinaryValue", SqlDbType.VarBinary);
-                        param.Value = data;
-                        cmd.Parameters.Add(param);
-                        cmd.ExecuteNonQuery();
+                        if (num > 0)
+                        {
+                            string addquery = $"INSERT INTO dbo.[photo] VALUES ({IDX},@BinaryValue,0)";
+                            byte[] data = File.ReadAllBytes(imageList[num]);
+                            SqlCommand cmd = new SqlCommand(addquery, conn);
+                            SqlParameter param = new SqlParameter("@BinaryValue", SqlDbType.VarBinary);
+                            param.Value = data;
+                            cmd.Parameters.Add(param);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    //지금 추가된 idx까지 전부 idList에 저장(대표사진, 삭제 쿼리용)
+                    SqlDataReader dr = new SqlCommand($"SELECT TOP 1 idx FROM dbo.[Photo] ORDER BY idx DESC",conn).ExecuteReader();
+                    if (addList.Count > 0)
+                    {
+                        int lastid = 0;
+                        while (dr.Read())
+                        {
+                            lastid = Convert.ToInt32(dr.GetValue(0));
+                            
+                        }
+                        for (int i = lastid-addList.Count-removedrows+1; i <= lastid; i++)
+                        {
+                            idList.Add(i);
+                        }
                     }
                     conn.Close();
                     conn.Open();
-                    if (mainPicnum != PrevmainPicnum)
+                    //대표사진 여부 전부 0으로 설정 후 현재 대표사진만 0으로 설정
+                    new SqlCommand($"UPDATE dbo.[Photo] SET isRepresent=0", conn).ExecuteNonQuery();
+                    if(mainPicnum>=0) new SqlCommand($"UPDATE dbo.[Photo] SET isRepresent=1 WHERE idx={idList[mainPicnum]}", conn).ExecuteNonQuery();
+                    //삭제요청받은 행들 db에서 삭제
+                    foreach(int item in removeList)
                     {
-                        new SqlCommand($"UPDATE dbo.[Photo] SET isRepresent=1 ", conn).ExecuteNonQuery();
+                        new SqlCommand($"DELETE FROM dbo.[Photo] WHERE idx={idList[item]}",conn).ExecuteNonQuery();
                     }
+
                     conn.Close();
+                    addList.Clear();
+                    removeList.Clear();
+                    MessageBox.Show("프로필 수정이 완료됐습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
             }
@@ -134,7 +162,7 @@ namespace _2024Trial
             {
                 conn.Open();
                 //존재하는 이름이면 false
-                if (new SqlCommand($"SELECT * FROM dbo.[User] WHERE [nickName]='{NickNameBox.Text}'", conn).ExecuteReader().Read())
+                if (new SqlCommand($"SELECT * FROM dbo.[User] WHERE [nickName]='{NickNameBox.Text}'", conn).ExecuteReader().Read() && userData[2].ToString() != NickNameBox.Text)
                 {
                     MessageBox.Show("이 닉네임은 이미 사용중입니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -176,8 +204,21 @@ namespace _2024Trial
             }
             else
             {
-                int selectedPicID = Convert.ToInt32(dataGridView1.Rows[selectedRow].Cells[0].Value) - 1;
-                Image image = Image.FromFile(imageList[selectedPicID]);
+                int selectedPicID = Convert.ToInt32(dataGridView1.Rows[selectedRow].Cells[0].Value)-1;
+                Image image;
+                try
+                {
+                    image = Image.FromFile(imageList[selectedPicID]);
+                }catch(Exception ex)
+                {
+                    string bytestring = imageList[selectedPicID];
+                    byte[] imageByte = Convert.FromBase64String(bytestring);
+                    using (MemoryStream ms = new MemoryStream(imageByte))
+                    {
+                        image = Image.FromStream(ms);
+                    }
+                }
+                
                 MainPicBox.Image = image;
                 mainPicnum = selectedPicID; 
             }
@@ -189,18 +230,31 @@ namespace _2024Trial
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
-        {
+        {//이미지 삭제
             if (selectedRow == -1)
             {
                 MessageBox.Show("삭제할 사진을 선택하세요.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else if (selectedRow-1==mainPicnum)
+            else if (selectedRow==mainPicnum)
             {
                 MessageBox.Show("대표 사진은 삭제할 수 없습니다.", "경고", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
-
+                int index = addList.IndexOf(selectedRow);
+                if (index != -1)
+                {//db에 있던 사진 말고 현재 하는 사진 삭제하는 경우
+                    addList[index] = -1;
+                    removedrows++;
+                }
+                else
+                {//db에 있는 사진 삭제하는경우
+                    removeList.Add(selectedRow);
+                }
+                dataGridView1.Rows.RemoveAt(selectedRow);
+                MessageBox.Show("삭제가 완료되었습니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                selectedRow = -1;
+                dataGridView1.ClearSelection();
             }
         }
     }
