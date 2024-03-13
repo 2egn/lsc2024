@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-lsc2024",
+      "appliesTo": "/",
+      "type": "launch"
+    }
+  ]
+}
