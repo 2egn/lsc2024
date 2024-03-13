@@ -64,7 +64,6 @@
             IDBox.Name = "IDBox";
             IDBox.Size = new Size(205, 23);
             IDBox.TabIndex = 2;
-            IDBox.Text = "user2";
             // 
             // PWBox
             // 
@@ -73,7 +72,6 @@
             PWBox.PasswordChar = '●';
             PWBox.Size = new Size(205, 23);
             PWBox.TabIndex = 4;
-            PWBox.Text = "test1234";
             // 
             // label3
             // 
@@ -114,7 +112,6 @@
             ExitButton.TabIndex = 7;
             ExitButton.Text = "종료";
             ExitButton.UseVisualStyleBackColor = false;
-            ExitButton.Click += ExitButton_Click;
             // 
             // RegiRedirectLink
             // 
@@ -143,6 +140,8 @@
             Controls.Add(label1);
             Name = "Login";
             Text = "로그인";
+            Load += Login_Load;
+            VisibleChanged += Login_VisibleChanged;
             ResumeLayout(false);
             PerformLayout();
         }

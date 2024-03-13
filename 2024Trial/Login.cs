@@ -26,7 +26,7 @@ namespace _2024Trial
             bool isPasswordCorrect = false;
             var usernickname = "";
             bool isAdmin = false;
-            int IDX=0;
+            int IDX = 0;
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectString))
@@ -67,7 +67,7 @@ namespace _2024Trial
             else
             {
                 if (isAdmin)
-                {
+                {//관리자로 로그인시
                     MessageBox.Show($"{usernickname} 관리자님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Visible = false;
                     UserManage usermanage = new(this);
@@ -75,18 +75,24 @@ namespace _2024Trial
 
                 }
                 else
-                {
+                {//회원으로 로그인시
                     MessageBox.Show($"{usernickname} 회원님 환영합니다.", "정보", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Visible = false;
-                    AccountManage accountmanage = new(this,IDX);
+                    AccountManage accountmanage = new(this, IDX);
                     accountmanage.Show();
+                }
+                //ID 저장
+                if (SaveIDCheckBox.Checked)
+                {
+                    Properties.Settings.Default.ID = inputId;
+                    Properties.Settings.Default.Save();
                 }
 
             }
 
         }
 
-
+        //회원가입 링크
         private void RegiRedirectLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Register register = new Register(this);
@@ -94,9 +100,32 @@ namespace _2024Trial
             this.Visible = false;
         }
 
-        private void ExitButton_Click(object sender, EventArgs e)
+
+
+        private void Login_Load(object sender, EventArgs e)
+        {//id저장기능
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.ID))
+            {
+                IDBox.Text = Properties.Settings.Default.ID;
+                SaveIDCheckBox.Checked = true;
+            }
+        }
+
+        private void Login_VisibleChanged(object sender, EventArgs e)
         {
-            this.Dispose();
+            if (this.Visible == false)
+            {
+                IDBox.Text = null;
+                PWBox.Text = null;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.ID))
+                {
+                    IDBox.Text = Properties.Settings.Default.ID;
+                    SaveIDCheckBox.Checked = true;
+                }
+            }
         }
     }
 }
